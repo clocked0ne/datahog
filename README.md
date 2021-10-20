@@ -31,7 +31,7 @@ $ docker compose up -d
 $ docker compose down
 ```
 
-Once running, you can call the endpoint with a `POST` to  and the below request body to begin processing a request:
+Once running, you can call the endpoint with a `POST` to `localhost:3210/webhook` and the below example request body to begin processing a request:
 ```json
 {
   "provider": [
