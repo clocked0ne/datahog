@@ -1,3 +1,58 @@
+
+# Task implementation
+
+## Installation and setup
+
+```sh
+$ git clone git@github.com:clocked0ne/datahog.git
+$ cd datahog
+$ npm install
+```
+
+You can either run the application locally or Dockerised, but to run locally you will require your own Redis instance running.
+
+### Local
+
+Providers API
+```sh
+$ npm run api
+```
+
+Webhook application
+```sh
+$ npm start
+```
+
+### Dockerised
+
+```sh
+$ docker compose up -d
+
+$ docker compose down
+```
+
+Once running, you can call the endpoint with a `POST` to  and the below request body to begin processing a request:
+```json
+{
+  "provider": [
+    "gas",
+    "internet"
+  ],
+  "callbackUrl": "http://yourcallbackurl.io/api/"
+}
+```
+
+## Tests
+
+```sh
+$ npm test
+```
+
+
+Original task outline below
+
+---
+
 # Summary #
 At WonderBill we do a lot of data collection and processing from 3rd-party APIs.
 We also experience various issues with those APIs - long scheduled maintenance, temporary bad gateway errors due to load etc.

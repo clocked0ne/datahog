@@ -1,6 +1,6 @@
 import Redis from 'ioredis';
+import IORedis from 'ioredis';
 import pino from 'pino';
-import IORedis from "ioredis";
 
 const logger = pino();
 
@@ -11,30 +11,34 @@ const connection = {
 
 const redis = new Redis(connection);
 
-export const saveRequestEntry = (uuid: string, data: any): Promise<IORedis.Ok | null> => {
-  logger.info({
-    msg: `Saving request data`,
-    data,
-    uuid
-  });
-  return redis.set(uuid, JSON.stringify(data));
-}
+export const disconnect = () => redis.disconnect();
 
-export const getRequestEntry = async (uuid: string): Promise<any> => {
-  const entry: string | null = await redis.get(uuid);
-
-  if (entry) {
-    return JSON.parse(entry);
+export class Datastore {
+  static saveRequestEntry = (uuid: string, data: any): Promise<IORedis.Ok | null> => {
+    logger.debug({
+      msg: `Saving request data`,
+      data,
+      uuid
+    });
+    return redis.set(uuid, JSON.stringify(data));
   }
-  else {
-    return null;
+
+  static getRequestEntry = async (uuid: string): Promise<any> => {
+    const entry: string | null = await redis.get(uuid);
+
+    if (entry) {
+      return JSON.parse(entry);
+    }
+    else {
+      return null;
+    }
   }
-}
 
-export const deleteRequestEntry = async (uuid: string): Promise<number> => {
-  return redis.del(uuid);
-}
+  static deleteRequestEntry = async (uuid: string): Promise<number> => {
+    return redis.del(uuid);
+  }
 
-export const getAllRequestEntryKeys = async (): Promise<string[]> => {
-  return await redis.keys('*');
+  static getAllRequestEntryKeys = async (): Promise<string[]> => {
+    return await redis.keys('*');
+  }
 }

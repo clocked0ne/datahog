@@ -1,8 +1,7 @@
-
 // @ts-ignore
 import RedisMock from 'ioredis-mock/jest';
 import Chance from 'chance';
-import { saveRequestEntry, getRequestEntry, getAllRequestEntryKeys, deleteRequestEntry } from '../../src/webhook/datastore';
+import { Datastore } from '../../src/webhook/datastore';
 const chance = Chance();
 const PROVIDERS = ['gas', 'internet'];
 
@@ -16,12 +15,12 @@ describe('Storing requests to process', () => {
     const requestEntry2 = { providers: chance.pickset(PROVIDERS), callbackUrl: chance.url() };
 
     beforeAll(async () => Promise.all([
-      saveRequestEntry(uuid1, requestEntry1),
-      saveRequestEntry(uuid2, requestEntry2)
+      Datastore.saveRequestEntry(uuid1, requestEntry1),
+      Datastore.saveRequestEntry(uuid2, requestEntry2)
     ]));
 
     it('returns all of the keys in the response', async () => {
-      const response = await getAllRequestEntryKeys();
+      const response = await Datastore.getAllRequestEntryKeys();
 
       expect(response).toEqual([uuid1, uuid2]);
     });
@@ -34,7 +33,7 @@ describe('Storing requests to process', () => {
         providers: chance.pickset(PROVIDERS),
         callbackUrl: chance.url()
       };
-      const response = await saveRequestEntry(uuid, requestEntry);
+      const response = await Datastore.saveRequestEntry(uuid, requestEntry);
 
       expect(response).toEqual('OK');
     });
@@ -48,11 +47,11 @@ describe('Storing requests to process', () => {
     };
 
     beforeAll(async () => {
-      await saveRequestEntry(uuid, requestEntry);
+      await Datastore.saveRequestEntry(uuid, requestEntry);
     });
 
     it('returns a success response', async () => {
-      const response = await getRequestEntry(uuid);
+      const response = await Datastore.getRequestEntry(uuid);
 
       expect(response).toEqual(requestEntry);
     });
@@ -66,11 +65,11 @@ describe('Storing requests to process', () => {
     };
 
     beforeAll(async () => {
-      await saveRequestEntry(uuid, requestEntry);
+      await Datastore.saveRequestEntry(uuid, requestEntry);
     });
 
     it('returns a success response', async () => {
-      const response = await deleteRequestEntry(uuid);
+      const response = await Datastore.deleteRequestEntry(uuid);
 
       expect(response).toEqual(1);
     });
