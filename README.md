@@ -59,7 +59,7 @@ When we have all the data collected to fulfill a request, we attempt to send it 
 
 ### AWS Architecture
 
-This event-driven asynchronous approach would benefit from being architected using AWS technologies instead of as a running application, not just from a cost perspective but also to benefit from better options for resiliency and scalability.
+This event-driven asynchronous approach would benefit from being architected using serverless AWS technologies instead of as a server-based application, not just from a cost perspective but also to benefit from better options for resiliency and scalability.
 
 The cron task would be driven by a Cloudwatch Event that is scheduled to poll at regular intervals, the data could be stored in Elasticache or DynamoDB for predicatable scalability and throughput. The diagram below outlines this flow:
 
