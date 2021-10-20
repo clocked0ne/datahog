@@ -4,7 +4,7 @@ import Chance from 'chance';
 import type { Bill } from '../../types/bill';
 
 const chance = Chance();
-const API_ENDPOINT = 'https://localhost:3000/';
+const API_ENDPOINT = 'http://localhost:3000/';
 const CALLBACK_URL = 'https://clientcallback.com/';
 const PROVIDERS = ['gas', 'internet'];
 

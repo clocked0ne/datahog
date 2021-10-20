@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://localhost:3000/providers';
+const API_BASE_URL = 'http://localhost:3000/providers';
 
 import got from 'got';
 import pino from 'pino';
@@ -7,12 +7,12 @@ import type { ProviderRequestData } from '../../types/provider';
 import type { CallbackRequestData } from '../../types/callback';
 const logger = pino();
 
-export const getProviderData = async (request: ProviderRequestData): Promise<Bill | []> => {
+export const getProviderData = async (request: ProviderRequestData): Promise<Bill[] | []> => {
   try {
     // By default got will retry requests at least once on error
     const response = await got.get(`${API_BASE_URL}/${request.provider}`, {
       timeout: 5000
-    }).json() as Bill | [];
+    }).json() as Bill[] | [];
 
     logger.info({
       msg: `Fetched ${request.provider} provider data`,
@@ -24,6 +24,7 @@ export const getProviderData = async (request: ProviderRequestData): Promise<Bil
   }
   catch (error: any) {
     logger.info({
+      url: `${API_BASE_URL}/${request.provider}`,
       msg: `${request.provider} provider unavailable`,
       uuid: request.uuid
     });

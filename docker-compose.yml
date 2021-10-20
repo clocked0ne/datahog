@@ -1,0 +1,21 @@
+version: '3.9'
+services:
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile-api
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/usr/api
+  webhook:
+    build: .
+    ports:
+      - '3210:3210'
+    volumes:
+      - .:/usr/app
+    links:
+      - redis
+      - api
+  redis:
+    image: redis:6.2.6-alpine

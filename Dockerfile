@@ -14,4 +14,4 @@ RUN tsc
 
 USER node
 EXPOSE 3210
-ENTRYPOINT ["dumb-init","node","./dist/server.js"]
+ENTRYPOINT ["dumb-init","node","./dist/src/webhook/server.js"]
