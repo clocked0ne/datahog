@@ -49,7 +49,27 @@ $ npm test
 ```
 
 
-Original task outline below
+## Design decisions
+
+To try and stick as close to the brief as possible and meet all the requirements, the webhook has been created through an Express app and associated cron task process, using Redis as an efficient storage engine to hold in-flight request data.
+
+In order to ensure the application is robust, the request data is saved at each stage of processing - including where there are multiple providers in a single request - offering the capability to skip over providers we have already fetched data from instead of repeatedly retrying.
+
+When we have all the data collected to fulfill a request, we attempt to send it to the callback URL provided; if this URL is unavailable/unreachable the request will sit in the processing Redis store until the next processing cycle. 
+
+### AWS Architecture
+
+This event-driven asynchronous approach would benefit from being architected using AWS technologies instead of as a running application, not just from a cost perspective but also to benefit from better options for resiliency and scalability.
+
+The cron task would be driven by a Cloudwatch Event that is scheduled to poll at regular intervals, the data could be stored in Elasticache or DynamoDB for predicatable scalability and throughput. The diagram below outlines this flow:
+
+![AWS Cloud](https://github.com/clocked0ne/datahog/blob/master/doc/aws-flow-diagram.png?raw=true)
+
+Within AWS there are other options for how this could be implemented also depending on the business needs, such as using SQS Queues to manage the in-flight requests instead of a data store. 
+
+
+
+_The original task is outlined below_
 
 ---
 
